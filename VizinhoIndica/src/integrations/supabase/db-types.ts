@@ -1,5 +1,4 @@
-// Minimal DB type shim for the Vizinho Indica schema (int8 ids).
-// Kept separate from the managed src/integrations/supabase/types.ts.
+// Minimal DB type shim for the Vizinho Indica schema.
 
 export interface Database {
   public: {
@@ -14,10 +13,61 @@ export interface Database {
           condominio: string | null;
           created_at: string | null;
         };
-        Insert: Partial<Database["public"]["Tables"]["profiles"]["Row"]> & { id: string };
+        Insert: Partial<Database["public"]["Tables"]["profiles"]["Row"]> & {
+          id: string;
+        };
         Update: Partial<Database["public"]["Tables"]["profiles"]["Row"]>;
         Relationships: [];
       };
+
+      categorias: {
+        Row: {
+          id: number;
+          nome: string;
+          slug: string | null;
+          ativo: boolean | null;
+          ordem: number | null;
+          created_at: string | null;
+        };
+        Insert: Omit<
+          Database["public"]["Tables"]["categorias"]["Row"],
+          "id" | "created_at"
+        > & {
+          id?: number;
+          created_at?: string | null;
+        };
+        Update: Partial<Database["public"]["Tables"]["categorias"]["Row"]>;
+        Relationships: [];
+      };
+
+      home_config: {
+        Row: {
+          id: number;
+          ativo: boolean | null;
+          selo: string | null;
+          titulo_linha_1: string | null;
+          titulo_destaque: string | null;
+          titulo_linha_2: string | null;
+          descricao: string | null;
+          stat_1_numero: string | null;
+          stat_1_label: string | null;
+          stat_2_numero: string | null;
+          stat_2_label: string | null;
+          stat_3_numero: string | null;
+          stat_3_label: string | null;
+          created_at: string | null;
+        };
+        Insert: Omit<
+          Database["public"]["Tables"]["home_config"]["Row"],
+          "id" | "created_at"
+        > & {
+          id?: number;
+          created_at?: string | null;
+        };
+        Update: Partial<Database["public"]["Tables"]["home_config"]["Row"]>;
+        Relationships: [];
+      };
+
       servicos: {
         Row: {
           id: number;
@@ -29,13 +79,17 @@ export interface Database {
           foto_url: string | null;
           created_at: string | null;
         };
-        Insert: Omit<Database["public"]["Tables"]["servicos"]["Row"], "id" | "created_at"> & {
+        Insert: Omit<
+          Database["public"]["Tables"]["servicos"]["Row"],
+          "id" | "created_at"
+        > & {
           id?: number;
           created_at?: string | null;
         };
         Update: Partial<Database["public"]["Tables"]["servicos"]["Row"]>;
         Relationships: [];
       };
+
       avaliacoes: {
         Row: {
           id: number;
@@ -45,13 +99,17 @@ export interface Database {
           comentario: string | null;
           created_at: string | null;
         };
-        Insert: Omit<Database["public"]["Tables"]["avaliacoes"]["Row"], "id" | "created_at"> & {
+        Insert: Omit<
+          Database["public"]["Tables"]["avaliacoes"]["Row"],
+          "id" | "created_at"
+        > & {
           id?: number;
           created_at?: string | null;
         };
         Update: Partial<Database["public"]["Tables"]["avaliacoes"]["Row"]>;
         Relationships: [];
       };
+
       mensagens: {
         Row: {
           id: number;
@@ -73,6 +131,7 @@ export interface Database {
         Update: Partial<Database["public"]["Tables"]["mensagens"]["Row"]>;
         Relationships: [];
       };
+
       favoritos: {
         Row: {
           id: number;
@@ -80,7 +139,10 @@ export interface Database {
           servico_id: number;
           created_at: string | null;
         };
-        Insert: Omit<Database["public"]["Tables"]["favoritos"]["Row"], "id" | "created_at"> & {
+        Insert: Omit<
+          Database["public"]["Tables"]["favoritos"]["Row"],
+          "id" | "created_at"
+        > & {
           id?: number;
           created_at?: string | null;
         };
@@ -88,6 +150,7 @@ export interface Database {
         Relationships: [];
       };
     };
+
     Views: {
       v_servicos_destaque: {
         Row: {
@@ -106,6 +169,7 @@ export interface Database {
         Relationships: [];
       };
     };
+
     Functions: Record<string, never>;
     Enums: Record<string, never>;
   };
