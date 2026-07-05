@@ -14,16 +14,7 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
-const CATEGORIAS = [
-  "Todos",
-  "Reformas",
-  "Aulas",
-  "Culinária",
-  "Beleza",
-  "Cuidados",
-  "Tecnologia",
-  "Pets",
-];
+
 
 function Home() {
   const [q, setQ] = useState("");
@@ -86,22 +77,7 @@ function Home() {
               </Button>
             </div>
 
-            <div className="mt-5 flex flex-wrap justify-center gap-2">
-              {CATEGORIAS.map((c) => (
-                <button
-                  key={c}
-                  onClick={() => setCat(c)}
-                  className={
-                    "rounded-full px-4 py-1.5 text-sm font-medium transition-all " +
-                    (cat === c
-                      ? "bg-white text-primary shadow-sm"
-                      : "bg-white/15 text-white hover:bg-white/25 backdrop-blur")
-                  }
-                >
-                  {c}
-                </button>
-              ))}
-            </div>
+
           </div>
 
           <div className="mt-10 grid grid-cols-3 gap-4 max-w-xl mx-auto text-left">
@@ -126,7 +102,7 @@ function Home() {
         {isLoading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {Array.from({ length: 6 }).map((_, i) => (
-              <Skeleton key={i} className="aspect-[4/3] w-full rounded-xl" />
+              <Skeleton key={i} className="aspect-4/3 w-full rounded-xl" />
             ))}
           </div>
         ) : filtered.length === 0 ? (
