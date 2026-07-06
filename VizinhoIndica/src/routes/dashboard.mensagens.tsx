@@ -194,11 +194,11 @@ function Mensagens() {
       </div>
 
       <Card className="overflow-hidden p-0">
-        <div className="grid h-[calc(100vh-230px)] min-h-[520px] grid-cols-1 md:grid-cols-[280px_1fr]">
+        <div className="grid h-[calc(100dvh-230px)] min-h-[560px] grid-cols-1 xl:grid-cols-[340px_minmax(0,1fr)]">
           <div
             className={cn(
-              "overflow-y-auto border-border md:border-r",
-              active ? "hidden md:block" : "block",
+              "min-h-0 overflow-y-auto border-border xl:border-r",
+              active ? "hidden xl:block" : "block",
             )}
           >
             {conversas.length === 0 ? (
@@ -216,11 +216,11 @@ function Mensagens() {
                     type="button"
                     onClick={() => setActive(c.otherUserId)}
                     className={cn(
-                      "flex w-full items-center gap-3 border-b border-border/60 p-3 text-left transition-colors hover:bg-muted",
+                      "flex w-full items-center gap-3 border-b border-border/60 p-4 text-left transition-colors hover:bg-muted",
                       active === c.otherUserId && "bg-primary/10",
                     )}
                   >
-                    <Avatar className="h-10 w-10 shrink-0">
+                    <Avatar className="h-11 w-11 shrink-0">
                       <AvatarImage src={profile?.avatar_url ?? undefined} />
 
                       <AvatarFallback className="bg-primary/10 text-xs text-primary">
@@ -244,21 +244,31 @@ function Mensagens() {
           <div
             className={cn(
               "min-h-0 flex-col",
-              active ? "flex" : "hidden md:flex",
+              active ? "flex" : "hidden xl:flex",
             )}
           >
             {active ? (
               <>
-                <div className="flex items-center gap-2 border-b border-border px-4 py-3">
+                <div className="flex items-center gap-3 border-b border-border px-4 py-3">
                   <Button
                     type="button"
                     variant="ghost"
                     size="icon"
-                    className="md:hidden"
+                    className="shrink-0 xl:hidden"
                     onClick={() => setActive(null)}
                   >
                     <ArrowLeft className="h-4 w-4" />
                   </Button>
+
+                  <Avatar className="h-9 w-9 shrink-0">
+                    <AvatarImage
+                      src={profilesMap?.get(active)?.avatar_url ?? undefined}
+                    />
+
+                    <AvatarFallback className="bg-primary/10 text-xs text-primary">
+                      {getInitials(profilesMap?.get(active)?.nome)}
+                    </AvatarFallback>
+                  </Avatar>
 
                   <div className="min-w-0">
                     <p className="truncate font-semibold">
@@ -273,7 +283,7 @@ function Mensagens() {
 
                 <div
                   ref={scrollRef}
-                  className="min-h-0 flex-1 space-y-2 overflow-y-auto bg-muted/30 p-4"
+                  className="min-h-0 flex-1 space-y-2 overflow-y-auto bg-muted/30 p-4 sm:p-5"
                 >
                   {thread.map((m) => {
                     const mine = m.remetente_id === user?.id;
@@ -288,7 +298,7 @@ function Mensagens() {
                       >
                         <div
                           className={cn(
-                            "max-w-[85%] rounded-2xl px-3 py-2 text-sm shadow-sm sm:max-w-[75%]",
+                            "max-w-[88%] rounded-2xl px-3 py-2 text-sm shadow-sm sm:max-w-[78%] lg:max-w-[70%]",
                             mine
                               ? "rounded-br-sm bg-gradient-hero text-primary-foreground"
                               : "rounded-bl-sm bg-white text-foreground",
@@ -306,7 +316,7 @@ function Mensagens() {
                     e.preventDefault();
                     send();
                   }}
-                  className="flex gap-2 border-t border-border bg-background p-3"
+                  className="flex gap-2 border-t border-border bg-background p-3 sm:p-4"
                 >
                   <Input
                     value={draft}
@@ -325,7 +335,7 @@ function Mensagens() {
                 </form>
               </>
             ) : (
-              <div className="flex flex-1 items-center justify-center text-sm text-muted-foreground">
+              <div className="flex flex-1 items-center justify-center px-6 text-center text-sm text-muted-foreground">
                 Selecione uma conversa para começar
               </div>
             )}
