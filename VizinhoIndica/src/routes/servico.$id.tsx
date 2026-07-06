@@ -194,6 +194,12 @@ function ServiceDetail() {
       if (!user) throw new Error("Faça login para enviar mensagem");
       if (!servico || !msg.trim()) return;
 
+      if (servico.user_id === user.id) {
+        throw new Error(
+          "Você não pode contratar ou enviar mensagem para o próprio anúncio.",
+        );
+      }
+
       const { error } = await supabase.from("mensagens").insert({
         servico_id: servicoId,
         remetente_id: user.id,
@@ -241,6 +247,8 @@ function ServiceDetail() {
     avaliacoes.length > 0
       ? avaliacoes.reduce((s, a) => s + a.nota, 0) / avaliacoes.length
       : 0;
+
+  const usuarioEhDonoDoAnuncio = user?.id === servico.user_id;
 
   return (
     <div className="min-h-screen bg-background">
@@ -393,7 +401,11 @@ function ServiceDetail() {
                     </p>
                   </div>
 
-                  {chatOpen ? (
+                  {usuarioEhDonoDoAnuncio ? (
+                    <Button disabled className="h-11 w-full" variant="outline">
+                      Este anúncio é seu
+                    </Button>
+                  ) : chatOpen ? (
                     <div className="space-y-2">
                       <textarea
                         value={msg}
