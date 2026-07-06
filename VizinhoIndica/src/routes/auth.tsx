@@ -34,6 +34,10 @@ function getAuthErrorMessage(err: unknown, mode: "signin" | "signup") {
     return "Já existe uma conta com esse e-mail. Tente entrar ou use outro e-mail para se cadastrar.";
   }
 
+  if (mode === "signup" && message.includes("email rate limit exceeded")) {
+    return "Muitas tentativas de cadastro foram feitas em pouco tempo. Aguarde alguns minutos e tente novamente.";
+  }
+
   if (message) {
     return message;
   }
@@ -51,6 +55,19 @@ function AuthPage() {
   const [password, setPassword] = useState("");
   const [nome, setNome] = useState("");
   const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const urlMode = params.get("mode");
+
+    if (urlMode === "signup") {
+      setMode("signup");
+    }
+
+    if (urlMode === "signin") {
+      setMode("signin");
+    }
+  }, []);
 
   useEffect(() => {
     if (!loading && user) navigate({ to: "/" });
@@ -172,7 +189,11 @@ function AuthPage() {
                   disabled={busy}
                   className="h-11 w-full border-0 bg-gradient-hero text-primary-foreground hover:opacity-90"
                 >
-                  {busy ? "Aguarde..." : mode === "signin" ? "Entrar" : "Criar conta"}
+                  {busy
+                    ? "Aguarde..."
+                    : mode === "signin"
+                      ? "Entrar"
+                      : "Criar conta"}
                 </Button>
               </form>
             </Tabs>

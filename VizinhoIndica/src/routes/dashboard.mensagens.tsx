@@ -1,7 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Send } from "lucide-react";
+import { ArrowLeft, Send } from "lucide-react";
+import { toast } from "sonner";
+
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { Card } from "@/components/ui/card";
@@ -165,12 +167,18 @@ function Mensagens() {
     const text = draft.trim();
     setDraft("");
 
-    await supabase.from("mensagens").insert({
+    const { error } = await supabase.from("mensagens").insert({
       remetente_id: user.id,
       destinatario_id: active,
       conteudo: text,
       servico_id: null,
     });
+
+    if (error) {
+      toast.error("Não foi possível enviar a mensagem. Tente novamente.");
+      setDraft(text);
+      return;
+    }
 
     qc.invalidateQueries({ queryKey: ["todas-mensagens", user.id] });
   }
@@ -179,14 +187,20 @@ function Mensagens() {
     <div className="space-y-4">
       <div>
         <h1 className="text-2xl font-bold">Mensagens</h1>
+
         <p className="mt-1 text-sm text-muted-foreground">
           Converse com seus vizinhos
         </p>
       </div>
 
       <Card className="overflow-hidden p-0">
-        <div className="grid h-150 grid-cols-[280px_1fr]">
-          <div className="overflow-y-auto border-r border-border">
+        <div className="grid h-[calc(100vh-230px)] min-h-[520px] grid-cols-1 md:grid-cols-[280px_1fr]">
+          <div
+            className={cn(
+              "overflow-y-auto border-border md:border-r",
+              active ? "hidden md:block" : "block",
+            )}
+          >
             {conversas.length === 0 ? (
               <div className="p-6 text-center text-sm text-muted-foreground">
                 Nenhuma conversa ainda.
@@ -208,6 +222,7 @@ function Mensagens() {
                   >
                     <Avatar className="h-10 w-10 shrink-0">
                       <AvatarImage src={profile?.avatar_url ?? undefined} />
+
                       <AvatarFallback className="bg-primary/10 text-xs text-primary">
                         {getInitials(profile?.nome)}
                       </AvatarFallback>
@@ -215,6 +230,7 @@ function Mensagens() {
 
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-sm font-medium">{nome}</p>
+
                       <p className="truncate text-xs text-muted-foreground">
                         {c.ultimaMensagem}
                       </p>
@@ -225,18 +241,39 @@ function Mensagens() {
             )}
           </div>
 
-          <div className="flex flex-col">
+          <div
+            className={cn(
+              "min-h-0 flex-col",
+              active ? "flex" : "hidden md:flex",
+            )}
+          >
             {active ? (
               <>
-                <div className="border-b border-border px-4 py-3">
-                  <p className="font-semibold">
-                    {getProfileName(profilesMap?.get(active))}
-                  </p>
+                <div className="flex items-center gap-2 border-b border-border px-4 py-3">
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="md:hidden"
+                    onClick={() => setActive(null)}
+                  >
+                    <ArrowLeft className="h-4 w-4" />
+                  </Button>
+
+                  <div className="min-w-0">
+                    <p className="truncate font-semibold">
+                      {getProfileName(profilesMap?.get(active))}
+                    </p>
+
+                    <p className="text-xs text-muted-foreground">
+                      Conversa ativa
+                    </p>
+                  </div>
                 </div>
 
                 <div
                   ref={scrollRef}
-                  className="flex-1 space-y-2 overflow-y-auto bg-muted/30 p-4"
+                  className="min-h-0 flex-1 space-y-2 overflow-y-auto bg-muted/30 p-4"
                 >
                   {thread.map((m) => {
                     const mine = m.remetente_id === user?.id;
@@ -244,11 +281,14 @@ function Mensagens() {
                     return (
                       <div
                         key={m.id}
-                        className={cn("flex", mine ? "justify-end" : "justify-start")}
+                        className={cn(
+                          "flex",
+                          mine ? "justify-end" : "justify-start",
+                        )}
                       >
                         <div
                           className={cn(
-                            "max-w-[75%] rounded-2xl px-3 py-2 text-sm shadow-sm",
+                            "max-w-[85%] rounded-2xl px-3 py-2 text-sm shadow-sm sm:max-w-[75%]",
                             mine
                               ? "rounded-br-sm bg-gradient-hero text-primary-foreground"
                               : "rounded-bl-sm bg-white text-foreground",
@@ -272,12 +312,13 @@ function Mensagens() {
                     value={draft}
                     onChange={(e) => setDraft(e.target.value)}
                     placeholder="Escreva uma mensagem"
+                    className="min-w-0 flex-1"
                   />
 
                   <Button
                     type="submit"
                     disabled={!draft.trim()}
-                    className="border-0 bg-gradient-hero text-primary-foreground hover:opacity-90"
+                    className="shrink-0 border-0 bg-gradient-hero text-primary-foreground hover:opacity-90"
                   >
                     <Send className="h-4 w-4" />
                   </Button>
