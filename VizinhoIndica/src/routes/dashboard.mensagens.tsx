@@ -84,7 +84,7 @@ function Mensagens() {
       .channel(`mensagens-user-${user.id}`)
       .on(
         "postgres_changes",
-        { event: "INSERT", schema: "public", table: "mensagens" },
+        { event: "INSERT", schema: "vizinho_indica", table: "mensagens" },
         () => qc.invalidateQueries({ queryKey: ["todas-mensagens", user.id] }),
       )
       .subscribe();

@@ -1,7 +1,7 @@
 // Minimal DB type shim for the Vizinho Indica schema.
 
 export interface Database {
-  public: {
+  vizinho_indica: {
     Tables: {
       profiles: {
         Row: {
@@ -13,10 +13,10 @@ export interface Database {
           condominio: string | null;
           created_at: string | null;
         };
-        Insert: Partial<Database["public"]["Tables"]["profiles"]["Row"]> & {
+        Insert: Partial<Database["vizinho_indica"]["Tables"]["profiles"]["Row"]> & {
           id: string;
         };
-        Update: Partial<Database["public"]["Tables"]["profiles"]["Row"]>;
+        Update: Partial<Database["vizinho_indica"]["Tables"]["profiles"]["Row"]>;
         Relationships: [];
       };
 
@@ -30,13 +30,13 @@ export interface Database {
           created_at: string | null;
         };
         Insert: Omit<
-          Database["public"]["Tables"]["categorias"]["Row"],
+          Database["vizinho_indica"]["Tables"]["categorias"]["Row"],
           "id" | "created_at"
         > & {
           id?: number;
           created_at?: string | null;
         };
-        Update: Partial<Database["public"]["Tables"]["categorias"]["Row"]>;
+        Update: Partial<Database["vizinho_indica"]["Tables"]["categorias"]["Row"]>;
         Relationships: [];
       };
 
@@ -58,13 +58,13 @@ export interface Database {
           created_at: string | null;
         };
         Insert: Omit<
-          Database["public"]["Tables"]["home_config"]["Row"],
+          Database["vizinho_indica"]["Tables"]["home_config"]["Row"],
           "id" | "created_at"
         > & {
           id?: number;
           created_at?: string | null;
         };
-        Update: Partial<Database["public"]["Tables"]["home_config"]["Row"]>;
+        Update: Partial<Database["vizinho_indica"]["Tables"]["home_config"]["Row"]>;
         Relationships: [];
       };
 
@@ -80,13 +80,13 @@ export interface Database {
           created_at: string | null;
         };
         Insert: Omit<
-          Database["public"]["Tables"]["servicos"]["Row"],
+          Database["vizinho_indica"]["Tables"]["servicos"]["Row"],
           "id" | "created_at"
         > & {
           id?: number;
           created_at?: string | null;
         };
-        Update: Partial<Database["public"]["Tables"]["servicos"]["Row"]>;
+        Update: Partial<Database["vizinho_indica"]["Tables"]["servicos"]["Row"]>;
         Relationships: [];
       };
 
@@ -100,13 +100,13 @@ export interface Database {
           created_at: string | null;
         };
         Insert: Omit<
-          Database["public"]["Tables"]["avaliacoes"]["Row"],
+          Database["vizinho_indica"]["Tables"]["avaliacoes"]["Row"],
           "id" | "created_at"
         > & {
           id?: number;
           created_at?: string | null;
         };
-        Update: Partial<Database["public"]["Tables"]["avaliacoes"]["Row"]>;
+        Update: Partial<Database["vizinho_indica"]["Tables"]["avaliacoes"]["Row"]>;
         Relationships: [];
       };
 
@@ -121,14 +121,14 @@ export interface Database {
           created_at: string | null;
         };
         Insert: Omit<
-          Database["public"]["Tables"]["mensagens"]["Row"],
+          Database["vizinho_indica"]["Tables"]["mensagens"]["Row"],
           "id" | "created_at" | "lida"
         > & {
           id?: number;
           created_at?: string | null;
           lida?: boolean | null;
         };
-        Update: Partial<Database["public"]["Tables"]["mensagens"]["Row"]>;
+        Update: Partial<Database["vizinho_indica"]["Tables"]["mensagens"]["Row"]>;
         Relationships: [];
       };
 
@@ -140,13 +140,13 @@ export interface Database {
           created_at: string | null;
         };
         Insert: Omit<
-          Database["public"]["Tables"]["favoritos"]["Row"],
+          Database["vizinho_indica"]["Tables"]["favoritos"]["Row"],
           "id" | "created_at"
         > & {
           id?: number;
           created_at?: string | null;
         };
-        Update: Partial<Database["public"]["Tables"]["favoritos"]["Row"]>;
+        Update: Partial<Database["vizinho_indica"]["Tables"]["favoritos"]["Row"]>;
         Relationships: [];
       };
     };
